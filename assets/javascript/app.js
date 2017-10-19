@@ -82,7 +82,8 @@ $( document ).ready(function() {
 	var newQuiz = true;
 	var time = 60;
 	var endTime =0;
-
+	var timeLeft = true;
+	var submit = 0;
 
 	var intervalId = document.getElementById('timer');
 
@@ -93,31 +94,33 @@ $( document ).ready(function() {
 	
 	function startPage() {
 		$("#start").html("<button>Start</button>");
+			$("#start").one("click", function () {
+				startQuiz = false;
+				runTimer();
+					for (i=0; i<myQuestions.length ; i++) {
+					answers = [];
+					for(letter in myQuestions[i].answers){
 
-		$("#start").on("click", function () {
-			
-			runTimer();
-				for (i=0; i<myQuestions.length ; i++) {
-				answers = [];
-				for(letter in myQuestions[i].answers){
-
-					answers.push(
-						'<label>'
-							+ '<input type="radio" name="question'+i+'" value="'+letter+'">'
-							+ letter + ': '
-							+ myQuestions[i].answers[letter]
-						+ '</label>'
+						answers.push(
+							'<label>'
+								+ '<input type="radio" name="question'+i+'" value="'+letter+'">'
+								+ letter + ': '
+								+ myQuestions[i].answers[letter]
+							+ '</label>'
+						);
+					}
+					output.push(
+						'<div class="question">' + myQuestions[i].question + '</div>'
+						+ '<div class="answers">' + answers.join(' ') + '</div>'
 					);
 				}
-				output.push(
-					'<div class="question">' + myQuestions[i].question + '</div>'
-					+ '<div class="answers">' + answers.join(' ') + '</div>'
-				);
-			}
-			quizContainer.innerHTML = output.join('');
-		});
+				quizContainer.innerHTML = output.join('');
+			});
+		 
+		
 	};
 	var now = time;
+
 
 	function runTimer() {
 		intervalId = setInterval(function() {
@@ -127,24 +130,22 @@ $( document ).ready(function() {
 
 			  // Find the distance between now an the count down date
 			  
-			  console.log("distance: " + distance);
+			  // console.log("distance: " + distance);
 
 			  // Time calculations for days, hours, minutes and seconds
 			  var minutes = Math.floor(distance / 60);
 			  var seconds = distance - (minutes * 60);
-			  // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-			  console.log("min: " + minutes);
-			  // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-			  console.log("sec: " + seconds);
+			  
 
 			  // Display the result in the element with id="demo"
 			  document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
 
 			  now --;
-			  console.log("now: " + now);
+			  // console.log("now: " + now);
 
 			  // If the count down is finished, write some text 
 			  if (distance < 0) {
+			  	timeLeft = false;
 			    clearInterval(intervalId);
 			    document.getElementById("timer").innerHTML = "EXPIRED";
 			    showResults();
@@ -196,7 +197,12 @@ $( document ).ready(function() {
 	};
 
 	submitButton.onclick = function(){
-		showResults();
+		submit ++;
+		if(timeLeft === true && submit === 1) {
+			clearInterval(intervalId);
+			document.getElementById("timer").innerHTML = "EXPIRED"
+			showResults();
+		}
 	}
 
 	// function timesUp() {
