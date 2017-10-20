@@ -71,7 +71,7 @@ $( document ).ready(function() {
 				b: 'James Naismith',
 				c: 'Wilt Chamberlain'
 			},
-			correctAnswer: 'c'
+			correctAnswer: 'b'
 		},
 
 

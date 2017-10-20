@@ -26,4 +26,12 @@ body {
 	font-size: 25px;
 }
 
+button {
+	background: #f49e42;
+}
+
+button:hover {
+	background: white;
+}
+
 
